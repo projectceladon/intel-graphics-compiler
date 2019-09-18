@@ -1,3 +1,6 @@
+# It is necessory to tell makefile about the current path
+LOCAL_PATH := $(call my-dir)
+
 # Shared libraries
 include $(CLEAR_VARS)
 LOCAL_MODULE := libigc
