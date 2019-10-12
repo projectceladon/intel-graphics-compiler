@@ -1,0 +1,43 @@
+From 1fd5e2efd3262906b65ee1c1c0817698c7e221f6 Mon Sep 17 00:00:00 2001
+From: yifang ma <yifangx.ma@intel.com>
+Date: Fri, 7 Jun 2019 00:48:34 +0800
+Subject: [PATCH] add the party of supporting that openning module on Android
+
+---
+ igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ mode change 100644 => 100755 igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp
+
+diff --git a/igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp b/igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp
+old mode 100644
+new mode 100755
+index e700153..9abf1b4
+--- a/igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp
++++ b/igc/IGC/OCLFE/igd_fcl_mcl/source/clang_tb.cpp
+@@ -600,7 +600,11 @@ namespace TC
+ 				// Avoid sumbol conflicts if some LLVM is already loaded in the project.
+ 				// CCModule will use its own symbols in preference to global symbols with the same name 
+ 				// contained in libraries that have already been loaded
++#ifdef ANDROID
++				CCModule.pModule = dlopen(CCModule.pModuleName, RTLD_NOW);
++#else
+ 				CCModule.pModule = dlopen(CCModule.pModuleName, RTLD_NOW | RTLD_DEEPBIND);
++#endif
+ 				if (NULL == CCModule.pModule)
+ 				{
+ 					// Try to load with old name. See header file for explanation.
+@@ -608,7 +612,11 @@ namespace TC
+ 				}
+ 				if (NULL == CCModule.pModule)
+ 				{
++#ifdef ANDROID
++					CCModule.pModule = dlopen("/usr/local/lib/libopencl_clang.so", RTLD_NOW);
++#else
+ 					CCModule.pModule = dlopen("/usr/local/lib/libopencl_clang.so", RTLD_NOW | RTLD_DEEPBIND);
++#endif
+ 					if (NULL == CCModule.pModule)
+ 					{
+ 						// Try to load with old name. See header file for explanation.
+-- 
+2.7.4
+
