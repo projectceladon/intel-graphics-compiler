@@ -1,0 +1,28 @@
+From e68bceb69c4176c7c2989ea29edebcfca757bd14 Mon Sep 17 00:00:00 2001
+From: yifang ma <yifangx.ma@intel.com>
+Date: Wed, 12 Jun 2019 00:21:59 +0800
+Subject: [PATCH] llvm_source: added marco to avoid call the `backtrace'
+ function
+
+The Celadon-P doesn't have the `backtrace' function
+---
+ llvm_build/device/include/llvm/Config/config.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/llvm_build/device/include/llvm/Config/config.h b/llvm_build/device/include/llvm/Config/config.h
+index 6c4300a..c61d9df 100644
+--- a/llvm_build/device/include/llvm/Config/config.h
++++ b/llvm_build/device/include/llvm/Config/config.h
+@@ -14,7 +14,9 @@
+ #define ENABLE_CRASH_OVERRIDES 1
+ 
+ /* Define to 1 if you have the `backtrace' function. */
++#if !defined(__ANDROID__)
+ #define HAVE_BACKTRACE TRUE
++#endif
+ 
+ #define BACKTRACE_HEADER <execinfo.h>
+ 
+-- 
+2.7.4
+
