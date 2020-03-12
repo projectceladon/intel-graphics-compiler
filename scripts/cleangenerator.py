@@ -32,8 +32,8 @@ class Main:
         script = path.dirname(__file__)
         root = path.abspath(path.join(script, "../.."))
 
-        print("script = " + script)
-        print("root = " + root)
+        print(("script = " + script))
+        print(("root = " + root))
 
         # remove all intermediate files and building directories
         print("It is removing building directories and intermediate files for Intel-Graphics-Compiler ... ")

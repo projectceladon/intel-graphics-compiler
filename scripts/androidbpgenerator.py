@@ -134,7 +134,7 @@ class Generator:
 
         allBPs = {}
         # sub-module" .bp
-        for k in self.allmoduleinfo.keys():
+        for k in list(self.allmoduleinfo.keys()):
             # the path of Android.bp
             bp = path.normpath(path.join(self.src, self.allmoduleinfo[k].Bp_File_Name))
             # read template
@@ -143,20 +143,20 @@ class Generator:
             # remove all comment
             tpl = re.sub("#.*\n", "", tpl).strip()
             # an Android.bp is related to some module
-            if bp in allBPs.keys():
+            if bp in list(allBPs.keys()):
                 allBPs[bp] += "\n\n" + self.replaceTemplate(k, tpl)
             else:
                 allBPs[bp] = self.replaceTemplate(k, tpl)
         # Android.bp
         allBPs[self.allmoduledefaults.getBpFilePath()] = self.allmoduledefaults.generate()
 
-        for bp in allBPs.keys():
+        for bp in list(allBPs.keys()):
             # remove old Android.bp
             remove(bp)
             # create new Android.bp
             with open(bp, "w") as f:
                 f.write(allBPs[bp])
-            print(bp + " has been generated.")
+            print((bp + " has been generated."))
 
     #virtuall functions
     def getTemplate(self):
@@ -217,7 +217,7 @@ class Generator:
         cmd += "cd " + builddir + " && " + self.getCmakeCmd() + verbose
         # need to make this project
         if make: 
-            print("It is making: " + self.src)
+            print(("It is making: " + self.src))
             cmd += "make -j$(nproc)"
 
         os.system(cmd)
@@ -246,7 +246,7 @@ class Generator:
         return "\n".join(includesfile) if includesfile else ""
 
     def getDefines(self, mode, title):
-        if not mode in self.allmoduleinfo.keys():
+        if not mode in list(self.allmoduleinfo.keys()):
             raise Exception("Invalid index of module info")
 
         flagsfile = path.join(self.getBuildDir(), self.allmoduleinfo[mode].Flags_Make)
@@ -270,7 +270,7 @@ class Generator:
         return all_defines
 
     def getSources(self, mode):
-        if not mode in self.allmoduleinfo.keys():
+        if not mode in list(self.allmoduleinfo.keys()):
             raise Exception("Invalid index of module info")
 
         buildfile = path.join(self.getBuildDir(), self.allmoduleinfo[mode].Build_Make)
@@ -286,7 +286,7 @@ class Generator:
         return INDENT * 2 + "".join(lines).strip()
 
     def getLibrary(self, mode, reg1, reg2, reg3):
-        if not mode in self.allmoduleinfo.keys():
+        if not mode in list(self.allmoduleinfo.keys()):
             raise Exception("Invalid index of module info")
 
         buildfile = path.join(self.getBuildDir(), self.allmoduleinfo[mode].Build_Make)

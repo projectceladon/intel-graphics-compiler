@@ -162,8 +162,8 @@ class Main:
         script = path.dirname(__file__)
         root = path.abspath(path.join(script, "../.."))
 
-        print("script = " + script)
-        print("root = " + root)
+        print(("script = " + script))
+        print(("root = " + root))
 
         IntelGraphicsCompilerGenerator(root).generate(to_make = True)
         # Generating for LLVM should be after IGC
